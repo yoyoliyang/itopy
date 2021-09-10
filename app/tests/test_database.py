@@ -6,7 +6,6 @@ import sql_app.models as models
 
 import ipaddress
 
-models.Base.metadata.create_all(bind=engine)
 
 def session(func):
     """ 传递session到测试函数 """ 
@@ -14,6 +13,9 @@ def session(func):
         def wrap():
             func(session)
         return wrap
+
+def test_create_db():
+    models.Base.metadata.create_all(bind=engine)
    
 @session
 def test_db_connect(s: Session):
