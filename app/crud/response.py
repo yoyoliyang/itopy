@@ -22,7 +22,7 @@ class ResponseData:
                 'status': self.status_msg, 
                 'data': self.data
                 }
-        elif self.status_code == status.HTTP_400_BAD_REQUEST:
+        elif self.status_code == status.HTTP_400_BAD_REQUEST or self.status_code == status.HTTP_404_NOT_FOUND:
             resp = {
                 'error': self.status_msg,
                 'data': self.data

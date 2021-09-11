@@ -8,24 +8,22 @@ class IPBase(BaseModel):
     """ IP地址基类, 保存id 值 描述 """
     id: int
     value: str # api接口处为str，实际通过create函数会将其转换为整数, 数据库字段类型为int类型
-    describe: str
+    describe: t.Union[str, None] # 增加None值避免空数据造成的pydantic检查错误
 
 class IPAddress(IPBase):
     subnet_id: int
 
     usable: bool = True
 
-    device_id: int
+    device_id: t.Union[int, None] 
 
-    # 所属子网 '192.168.0.0/24'
-    network: str
     class Config:
         orm_mode = True
 
 
 class IPSubnet(IPBase):
     # 子网ip范围
-    items: t.List[IPAddress]
+    items: t.List[IPAddress] = []
     class Config:
         orm_mode = True
 class IPSubnetCreate(IPBase):
@@ -40,7 +38,7 @@ class SSHAccount(AccountBase):
     private_key: str
     public_key: str
     
-    device_id: int
+    device_id: t.Union[int, None]
     class Config:
         orm_mode =True
     
