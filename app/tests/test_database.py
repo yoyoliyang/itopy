@@ -58,8 +58,8 @@ def test_insert_note(s: Session):
 
 @session
 def test_insert_ipsub(s: Session):
-    ip_inte_192 = ipaddress.IPv4Interface('192.168.0.0/24')
-    sub1 = models.IPSubnet(id=None, value=int(ip_inte_192), describe='192 subnet')
+    ip_inte_192 = ipaddress.IPv4Network('192.168.0.0/24')
+    sub1 = models.IPSubnet(id=None, value=ip_inte_192.exploded, describe='192 subnet')
     s.add(sub1)
     s.commit()
 

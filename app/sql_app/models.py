@@ -8,8 +8,8 @@ class IPSubnet(Base):
     __tablename__ = 'ip_subnet'
     
     id = Column(Integer, primary_key=True, index=True)
-    # 子网段数值(ip转int, ipaddress库)
-    value = Column(BigInteger, nullable=False, unique=True)
+    # 子网段数值(此处为str类型, 用ipaddress.IPv4Network生成)
+    value = Column(String(length=18), nullable=False, unique=True)
     describe = Column(Text(length=64))
 
 class IPAddress(Base):
@@ -20,7 +20,7 @@ class IPAddress(Base):
     subnet_id = Column(Integer, ForeignKey("ip_subnet.id"))
 
     # ip地址数值(ip转int)
-    value = Column(BigInteger, nullable=False, unique=True)
+    value = Column(BigInteger, nullable=False) # value允许重复，因为所属的subnet_id可能相同
     usable = Column(Boolean, nullable=True, default=True)
     describe = Column(Text(length=64))
 

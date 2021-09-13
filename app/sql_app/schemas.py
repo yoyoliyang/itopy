@@ -7,8 +7,13 @@ from pydantic import BaseModel
 class IPBase(BaseModel):
     """ IP地址基类, 保存id 值 描述 """
     id: int
-    value: str # api接口处为str，实际通过create函数会将其转换为整数, 数据库字段类型为int类型
+    """ api接口处为str，实际通过create函数会将其转换为整数, 数据库字段类型为int类型
+        但排除subnet，subnet为ipaddress.IPv4Network生成的字符串，保留了掩码位
+    """
+    value: str 
     describe: t.Union[str, None] # 增加None值避免空数据造成的pydantic检查错误
+    class Config:
+        orm_mode = True
 
 class IPAddress(IPBase):
     subnet_id: int
@@ -27,7 +32,16 @@ class IPSubnet(IPBase):
     class Config:
         orm_mode = True
 class IPSubnetCreate(IPBase):
+    """ POST 类提供给api结构调用 """
     pass
+class IPSubnetGet(BaseModel):
+    """ GET 类提供给api结构调用 """
+    item: t.List[IPBase] = []
+    class Config:
+        orm_mode = True
+class IPSubnetUpdate(BaseModel):
+    """ PUT 类 """
+    describe: t.Union[str, None]
 
 class AccountBase(BaseModel):
     id: int
